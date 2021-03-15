@@ -10,21 +10,22 @@ using namespace std;
 vector<uint8_t> memory;
 
 // Intel 8080 machine code to inject at 0x0000
-array<uint8_t, 0x23> patch_code = {
+array<uint8_t, 0x2A> patch_code = {
     0x3E, 0x01, // mvi a, 1
     0xD3, 0x00, // out 0, a // Value of 0x01 written to port 0 stops test execution
     0x00, // nop
+    0xF5, // push psw
     0x79, // mov a, c
     0xD3, 0x01, // out 1, a // Send command value to control port
     0xDB, 0x01, // in 1 // Receive status byte from control port
     0x47, // mov b, a
     0xE6, 0x01, // ani 1 // Return from function if bit 0 is clear
-    0xC8, // rz
+    0xCA, 0x28, 0x00, // jz end_func
     0x78, // mov a, b
     0xE6, 0x02, // ani 2 // Check if bit 1 is set
-    0xCC, 0x18, 0x00, // cz c_write // If bit 1 is clear, call c_write function
-    0xC4, 0x1C, 0x00, // cnz c_write_str // Otherwise, call c_write_str function
-    0xC9, // ret // Return from function
+    0xCC, 0x1D, 0x00, // cz c_write // If bit 1 is clear, call c_write function
+    0xC4, 0x21, 0x00, // cnz c_write_str // Otherwise, call c_write_str function
+    0xC3, 0x28, 0x00, // jmp end_func // Return from function
           // c_write:
     0x7B, //       mov a, e
     0xD3, 0x02, // out 2, a // Send character (in E register) to data port
@@ -34,7 +35,10 @@ array<uint8_t, 0x23> patch_code = {
     0xD3, 0x02, // out 2, a // Send MSB of string address to data port
     0x7B, //       mov a, e
     0xD3, 0x02, // out 2, a // Send LSB of string address to data port
-    0xC9 //       ret // Return from function
+    0xC9, //       ret // Return from function
+	  // end_func:
+    0xF1, //       pop psw
+    0xC9  //       ret
 };
 
 void patchisr()
@@ -186,28 +190,36 @@ void run_test(Bee8080 &core, string filename, uint64_t cycles_expected)
 
     cout << "*** TEST: " << filename << endl;
 
-    int cycles = 0;
+    uint64_t cycles = 0;
     uint64_t num_instrs = 0;
 
     while (!is_test_done)
     {
 	num_instrs += 1;
+	// Uncomment line 201 to display debug output of the emulated 8080's CPU state
+	// WARNING: doing this will output multiple GB of data for the entire test suite
+	// core.debugoutput();
 	cycles += core.runinstruction();
     }
 
-    uint64_t diff = (cycles_expected - cycles);
+    int64_t diff = (cycles_expected - cycles);
     cout << endl;
-    cout << "*** " << num_instrs << " instruction executed on " << dec << (int)(cycles) << " cycles";
-    cout << " (expected=" << dec << (int)(cycles_expected) << ", diff=" << dec << (int)(diff) << ")" << endl;
+    cout << "*** " << dec << (uint64_t)(num_instrs) << " instructions executed on " << dec << (uint64_t)(cycles) << " cycles";
+    cout << " (expected=" << dec << (uint64_t)(cycles_expected) << ", diff=" << dec << (int64_t)(diff) << ")" << endl;
     cout << endl;
     core.shutdown();
+    fflush(stdout);
     memory.clear();
 }
 
 int main(int argc, char *argv[])
 {
     Bee8080 core;
-    run_test(core, "TEST.COM", 266);
-    run_test(core, "TST8080.COM", 4924LU);
+    run_test(core, "tests/TEST.COM", 302LU);
+    run_test(core, "tests/TST8080.COM", 5230LU);
+    run_test(core, "tests/CPUTEST.COM", 255689268LU);
+    run_test(core, "tests/8080PRE.COM", 7972LU);
+    run_test(core, "tests/8080EXM.COM", 23835703061LU);
+    run_test(core, "tests/8080EX1.COM", 23835598629LU);
     return 0;
 }

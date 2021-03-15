@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 project(bee8080)
 
-option(BUILD_TESTS "Enables the Bee8080 test suite." ON)
+option(BUILD_TESTS "Enables the Bee8080 test suite." OFF)
 
 if (WIN32)
 	message(STATUS "Operating system is Windows.")
@@ -58,14 +58,14 @@ elseif (APPLE)
 	endif()
 endif()
 
-add_library(8080 ${BEE8080_SOURCE} ${BEE8080_HEADERS})
-target_include_directories(8080 PUBLIC ${BEE8080_INCLUDE_DIR})
+add_library(bee8080 ${BEE8080_SOURCE} ${BEE8080_HEADERS})
+target_include_directories(bee8080 PUBLIC ${BEE8080_INCLUDE_DIR})
 
-add_library(bee8080 ALIAS 8080)
+add_library(libbee8080 ALIAS bee8080)
 
 if (BUILD_TESTS STREQUAL "ON")
     project(bee8080-tests)
     add_executable(bee8080-tests ${BEE8080_TEST_SOURCES})
     include_directories(bee8080-tests ${BEE8080_INCLUDE_DIR})
-    target_link_libraries(bee8080-tests bee8080)
+    target_link_libraries(bee8080-tests libbee8080)
 endif()

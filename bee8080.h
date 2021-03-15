@@ -2,6 +2,7 @@
 #define BEE8080_H
 
 #include <iostream>
+#include <sstream>
 #include <cstdint>
 using namespace std;
 
@@ -74,11 +75,23 @@ namespace bee8080
 	    // Stops the emulated CPU
 	    void shutdown();
 
+	    // Reset the emulated CPU
+	    void reset(uint16_t init_pc = 0);
+
 	    // Sets a custom interface for the emulated 8080
 	    void setinterface(Bee8080Interface *cb);
 
 	    // Runs the CPU for one instruction
 	    int runinstruction();
+
+	    // Asks for an interrupt to be serviced
+	    void setinterrupt(uint8_t opcode);
+
+	    // Prints debug output to the console
+	    void debugoutput(bool printdisassembly = true);
+
+	    // Disassembles an Intel 8080 instruction at address of "addr"
+	    string disassembleinstr(uint16_t addr);
 
 	private:
 	    // Private declaration of interface class
@@ -126,6 +139,9 @@ namespace bee8080
 	    // Logic code for conditional return instructions
 	    int ret_cond(bool cond = true);
 
+	    // Logic code for RST instructions
+	    int rst(int num);
+
 	    // Logic code for pushing registers onto the stack
 	    int push_stack(uint16_t val);
 
@@ -141,11 +157,38 @@ namespace bee8080
 	    // Logic code for exchanging the values of the DE and HL registers
 	    int xchg();
 
+	    // Logic code for exchanging the value of the HL register and
+	    // the value of a word at [SP]
+	    int xthl();
+
 	    // Logic code for arithmetic/logical operations
-	    // TODO: Implement arithmetic operations
+	    // TODO: Implement remaining arithmetic operations
+	    void add(uint8_t val); // ADD operation
+	    void adc(uint8_t val); // ADC operation
+	    void dad(uint16_t val); // DAD operation
+	    void sub(uint8_t val); // SUB operation
+	    void sbb(uint8_t val); // SBB operation
+	    uint8_t incr(uint8_t val); // INR operation
+	    uint8_t decr(uint8_t val); // DCR operation
 	    void ana(uint8_t val); // AND operation
 	    void ora(uint8_t val); // ORA operation
 	    void xra(uint8_t val); // XRA operation
+	    void cmp(uint8_t val); // CMP operation
+
+	    // Logic code for rotate operations
+	    void rlc(); // RLC operation
+	    void rrc(); // RRC operation
+	    void ral(); // RAL operation
+	    void rar(); // RAR operation
+
+	    // Logic code for DAA operation
+	    void daa();
+
+	    // Internal code for arithmetic operations
+	    // Note: "carry" defaults to false in this implementation
+	    // to make calculations with plain addition easier
+	    uint8_t add_internal(uint8_t reg, uint8_t val, bool carryflag = false); // ADD
+	    uint8_t sub_internal(uint8_t reg, uint8_t val, bool carryflag = false); // SUB
 
 	    // Logic code for setting individual flags
 	    void setcarry(bool val); // Sets carry flag
@@ -162,13 +205,29 @@ namespace bee8080
 	    bool isparity(); // Fetches parity flag
 
 	    // Bit manipulation functions
-	    bool testbit(uint8_t reg, int bit);
-	    uint8_t setbit(uint8_t reg, int bit);
-	    uint8_t resetbit(uint8_t reg, int bit);
-	    uint8_t changebit(uint8_t reg, int bit, bool val);
+	    bool testbit(uint32_t reg, int bit);
+	    uint32_t setbit(uint32_t reg, int bit);
+	    uint32_t resetbit(uint32_t reg, int bit);
+	    uint32_t changebit(uint32_t reg, int bit, bool val);
+
+	    // Sets the zero, sign, and parity flags
+	    void setzsp(uint8_t val);
+
+	    // Function for determing carry between bit "bit_num" and "bit_num - 1"
+	    // when performing an addition or subtraction of two values
+	    bool carry(int bit_num, uint8_t reg, uint8_t val, uint16_t res);
 
 	    // Function for calculating the parity of a byte
 	    bool parity(uint8_t val);
+
+	    // Variables for interrupts
+	    bool interrupt_enable = false;
+	    bool interrupt_delay = false;
+	    bool interrupt_pending = false;
+	    uint8_t interrupt_opcode = 0;
+
+	    // Variable to keep track of whether or not the CPU is halted
+	    bool is_halted = false;
     };
 };
 
