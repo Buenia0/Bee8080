@@ -138,7 +138,7 @@ class Interface : public Bee8080Interface
 {
     public:
 	uint8_t ram[0x10000]; // 64KB memory (minimum)
-	uint8_t io[0x100]; // 256 port
+	uint8_t io[0x100]; // 256 bytes of I/O ports
 
 	Interface()
 	{
@@ -164,6 +164,7 @@ class Interface : public Bee8080Interface
 	    return io[port];
 	}
 
+	// OUT operand request from CPU
 	void portOut(uint8_t port, uint8_t val)
 	{
 	    io[port] = val;
@@ -204,6 +205,7 @@ int instr_cycles = core.runinstruction();
 If you want to generate an interrupt:
 
 ```
+// This function accepts a valid Intel 8080 opcode as its sole argument
 core.setinterrupt(0xC7); // 0xC7 = RST 0
 ```
 
@@ -219,10 +221,19 @@ core.reset(); // Resets the CPU with the program counter set to 0...
 If you want to disassemble an instruction at a specific address:
 
 ```
-// "addr" is the address where you want to disassemble an instruction
+// "addr" is the address of the instruction you want to disassemble
 // The resulting string can be printed to the console,
 // or even utilized in some sort of graphical debugger
 string instr_disassembly = core.disassembleinstr(addr);
+```
+
+If you want to output a more complete debug log of the emulated CPU state to the console:
+
+```
+// Call this function before executing an instruction
+core.debugoutput();
+// Run a single instruction
+core.runinstruction();
 ```
 
 # Plans
