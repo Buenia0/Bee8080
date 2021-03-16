@@ -77,18 +77,23 @@ Bee8080::~Bee8080()
 // Initialize the emulated 8080
 void Bee8080::init(uint16_t init_pc)
 {
-   // Initialize the registers (AF, BC, DE, HL) and the stack pointer to 0
-   af.setreg(0x0000);
-   bc.setreg(0x0000);
-   de.setreg(0x0000);
-   hl.setreg(0x0000);
-   sp = 0x0000;
+    // Initialize the registers (AF, BC, DE, HL) and the stack pointer to 0
+    af.setreg(0x0000);
+    bc.setreg(0x0000);
+    de.setreg(0x0000);
+    hl.setreg(0x0000);
+    sp = 0x0000;
 
-   // Initialize the PC to the value of init_pc
-   pc = init_pc;
+    // Initialize the PC to the value of init_pc
+    pc = init_pc;
 
-   // Notify the user that the emulated 8080 has been initialized
-   cout << "Bee8080::Initialized" << endl;
+    // Initialize the interrupt variables
+    interrupt_pending = false;
+    interrupt_enable = false;
+    is_halted = false;
+
+    // Notify the user that the emulated 8080 has been initialized
+    cout << "Bee8080::Initialized" << endl;
 }
 
 // Shutdown the emulated 8080
