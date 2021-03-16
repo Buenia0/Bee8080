@@ -24,7 +24,7 @@ And more to come!
 
 The Bee8080 library (and the testing framework, if desired) does not have any dependencies and can be compiled with MinGW on Windows, and (presumably) both GCC and Clang on Linux, as well as (presumably) AppleClang on OSX.
 
-In order to build the testing framework, simply pass `-DBUILD_TESTS="ON"` to CMake.
+In order to build the testing framework, simply pass `-DBUILD_8080_TESTS="ON"` to CMake.
 
 ## Linux:
 
@@ -67,7 +67,7 @@ Step 3: Compile:
 
 `mkdir build && cd build`
 
-`cmake .. -G "Unix Makefiles" -DBUILD_TESTS="<ON/OFF>" -DCMAKE_BUILD_TYPE="<Debug/Release>"`
+`cmake .. -G "Unix Makefiles" -DBUILD_8080_TESTS="<ON/OFF>" -DCMAKE_BUILD_TYPE="<Debug/Release>"`
 
 `make -j$(nproc --all)`
 
@@ -91,7 +91,7 @@ Step 3: Compile:
 
 `mkdir build && cd build`
 
-`cmake .. -G "Unix Makefiles" -DBUILD_TESTS="<ON/OFF>" -DCMAKE_BUILD_TYPE="<Debug/Release>"`
+`cmake .. -G "Unix Makefiles" -DBUILD_8080_TESTS="<ON/OFF>" -DCMAKE_BUILD_TYPE="<Debug/Release>"`
 
 `make -j$(sysctl -n hw.ncpu)`
 
@@ -114,7 +114,7 @@ Step 3: Compile:
 
 `mkdir build && cd build`
 
-`cmake .. -G "MSYS Makefiles" -DBUILD_TESTS="<ON/OFF>" -DCMAKE_BUILD_TYPE="<Debug/Release>"`
+`cmake .. -G "MSYS Makefiles" -DBUILD_8080_TESTS="<ON/OFF>" -DCMAKE_BUILD_TYPE="<Debug/Release>"`
 
 `(mingw32-)make -j$(nproc --all)`
 
