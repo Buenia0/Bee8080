@@ -6,6 +6,6 @@ if [[ ! -f "libbee8080.a" ]]; then
 fi
 
 
-if [[ ! -f "bee8080-tests.exe ]]; then
+if [[ -f "bee8080-tests.exe" ]]; then
 	cp -r ../tests .
 fi
