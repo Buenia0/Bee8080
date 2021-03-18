@@ -1113,6 +1113,7 @@ int Bee8080::executenextopcode(uint8_t opcode)
 	case 0x2D: hl.setlo(decr(hl.getlo())); cycle_count = 5; break; // DCR L
 	case 0x2E: hl.setlo(getimmByte()); cycle_count = 7; break; // MVI L, d8
 	case 0x2F: af.sethi(~af.gethi()); cycle_count = 4; break; // CMA
+	case 0x30: cycle_count = 4; break; // *NOP
 	case 0x31: sp = getimmWord(); cycle_count = 10; break; // LXI SP, d16
 	case 0x32: writeByte(getimmWord(), af.gethi()); cycle_count = 13; break; // STA a16
 	case 0x33: sp += 1; cycle_count = 5; break; // INX SP
@@ -1120,6 +1121,7 @@ int Bee8080::executenextopcode(uint8_t opcode)
 	case 0x35: writeByte(hl.getreg(), decr(readByte(hl.getreg()))); cycle_count = 10; break; // DCR M
 	case 0x36: writeByte(hl.getreg(), getimmByte()); cycle_count = 10; break; // MVI M, d8
 	case 0x37: setcarry(true); cycle_count = 4; break; // STC
+	case 0x38: cycle_count = 4; break; // *NOP
 	case 0x39: dad(sp); cycle_count = 10; break; // DAD SP
 	case 0x3A: af.sethi(readByte(getimmWord())); cycle_count = 13; break; // LDA a16
 	case 0x3B: sp -= 1; cycle_count = 5; break; // DCX SP
