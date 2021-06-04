@@ -58,7 +58,7 @@ elseif (APPLE)
 	endif()
 endif()
 
-add_library(bee8080 ${BEE8080_SOURCE} ${BEE8080_HEADERS})
+add_library(bee8080 ${BEE8080_SOURCE} ${BEE8080_HEADER})
 target_include_directories(bee8080 PUBLIC ${BEE8080_INCLUDE_DIR})
 
 add_library(libbee8080 ALIAS bee8080)

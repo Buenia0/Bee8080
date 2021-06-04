@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ ! -f "libbee8080.a" ]]; then
-	echo "Run this script from the directory where you built Bee8080."
+	echo "Run this script from the directory where you built the Bee8080 engine."
 	exit 1
 fi
 

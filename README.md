@@ -1,5 +1,5 @@
 # Bee8080
-Intel 8080 emulation library, kinda
+Intel 8080 emulation engine, kinda
 
 A complete emulation of the Intel 8080 processor written in C++11.
 

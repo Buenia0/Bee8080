@@ -1,3 +1,23 @@
+/*
+    This file is part of the Bee8080 engine.
+    Copyright (C) 2021 BueniaDev.
+
+    Bee8080 is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Bee8080 is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Bee8080.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+// bee8080.cpp - Contains function definitions for Bee8080 engine
+
 #include "bee8080.h"
 using namespace bee8080;
 using namespace std;
@@ -196,20 +216,12 @@ uint16_t Bee8080::readWord(uint16_t addr)
     // before accessing it (this helps prevent a buffer overflow caused
     // by an erroneous null pointer)
 
-    if (inter != NULL)
-    {
-	// The Intel 8080 is a little-endian system,
-	// so the 16-bit value is constructed as follows:
-	// val_16 = (mem[addr + 1] << 8) | mem[addr])
-	uint8_t lo_byte = inter->readByte(addr);
-	uint8_t hi_byte = inter->readByte((addr + 1));
-	return ((hi_byte << 8) | lo_byte);
-    }
-    else
-    {
-	// Return 0 if interface is invalid
-	return 0x0000;
-    }
+    // The Intel 8080 is a little-endian system,
+    // so the 16-bit value is constructed as follows:
+    // val_16 = (mem[addr + 1] << 8) | mem[addr])
+    uint8_t lo_byte = readByte(addr);
+    uint8_t hi_byte = readByte((addr + 1));
+    return ((hi_byte << 8) | lo_byte);
 }
 
 // Writes a 16-bit value "val" to memory at address of "addr"
@@ -219,16 +231,13 @@ void Bee8080::writeWord(uint16_t addr, uint16_t val)
     // before accessing it (this helps prevent a buffer overflow caused
     // by an erroneous null pointer)
 
-    if (inter != NULL)
-    {
-	// The Intel 8080 is a little-endian system,
-	// so the 16-bit value is written as follows:
-	// mem[addr] = low_byte(val)
-	// mem[addr + 1] = high_byte(val)
+    // The Intel 8080 is a little-endian system,
+    // so the 16-bit value is written as follows:
+    // mem[addr] = low_byte(val)
+    // mem[addr + 1] = high_byte(val)
 
-	inter->writeByte(addr, (val & 0xFF));
-	inter->writeByte((addr + 1), (val >> 8));
-    }
+    writeByte(addr, (val & 0xFF));
+    writeByte((addr + 1), (val >> 8));
 }
 
 // Reads an 8-bit value from an I/O device at port of "port"
