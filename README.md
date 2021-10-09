@@ -59,7 +59,7 @@ OpenSUSE (not tested): `sudo zypper in git cmake extra-cmake-modules`
 
 Step 2: Clone the repository:
 
-`git clone --recursive https://github.com/Buenia0/Bee8080.git`
+`git clone --recursive https://github.com/BueniaDev/Bee8080.git`
 
 `cd Bee8080`
 
@@ -83,7 +83,7 @@ Step 1: Install dependencies:
 
 Step 2: Clone the repository:
 
-`git clone --recursive https://github.com/Buenia0/Bee8080.git`
+`git clone --recursive https://github.com/BueniaDev/Bee8080.git`
 
 `cd Bee8080`
 
@@ -106,7 +106,7 @@ Step 1: Install dependencies:
 
 Step 2: Clone the repository:
 
-`git clone --recursive https://github.com/Buenia0/Bee8080.git`
+`git clone --recursive https://github.com/BueniaDev/Bee8080.git`
 
 `cd Bee8080`
 
@@ -258,6 +258,6 @@ Bee8080 is free software: you can redistribute it and/or modify it under the ter
 
 # Copyright
 
-(C) 2021 Buenia. This project is not affiliated in any way with Intel or its associates. Intel 8080 is a registered trademark of Intel Corporation.
+(C) 2021 BueniaDev. This project is not affiliated in any way with Intel or its associates. Intel 8080 is a registered trademark of Intel Corporation.
 
 For information regarding Bee8080's stance on copyright infringement, as well as proof of Bee8080's legality, see the LEGAL.md file in this repository.

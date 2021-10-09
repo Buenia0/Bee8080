@@ -119,12 +119,6 @@ void Bee8080::init(uint16_t init_pc)
 // Shutdown the emulated 8080
 void Bee8080::shutdown()
 {
-    // Set the interface pointer to NULL if we haven't done so already
-    if (inter != NULL)
-    {
-	inter = NULL;
-    }
-
     // Notify the user that the emulated 8080 has been shut down
     cout << "Bee8080::Shutting down..." << endl;
 }
