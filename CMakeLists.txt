@@ -9,30 +9,18 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 option(BUILD_8080_TESTS "Enables the Bee8080 test suite." OFF)
 
-set(BEE8080_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
+add_subdirectory(Bee8080)
+
 set(BEE8080_TEST_SOURCES
 	bee8080-tests.cpp)
-
-set(BEE8080_HEADER
-	bee8080.h)
-
-set(BEE8080_SOURCE
-	bee8080.cpp)
-
-add_library(bee8080 ${BEE8080_SOURCE} ${BEE8080_HEADER})
-target_include_directories(bee8080 PUBLIC ${BEE8080_INCLUDE_DIR})
-target_compile_definitions(bee8080 PRIVATE BEE8080_STATIC=1 _CRT_SECURE_NO_WARNINGS=1)
-add_library(libbee8080 ALIAS bee8080)
 
 if (BUILD_8080_TESTS STREQUAL "ON")
     project(bee8080-tests)
     add_executable(bee8080-tests ${BEE8080_TEST_SOURCES})
-    include_directories(bee8080-tests ${BEE8080_INCLUDE_DIR})
     target_link_libraries(bee8080-tests libbee8080)
 endif()
 

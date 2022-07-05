@@ -205,7 +205,7 @@ int instr_cycles = core.runinstruction();
 If you want to generate an interrupt:
 
 ```
-// This function accepts a valid Intel 8080 opcode as its sole argument
+// This function accepts a valid Intel 8080 opcode as its first argument
 core.setinterrupt(0xC7); // 0xC7 = RST 0
 ```
 
@@ -224,7 +224,9 @@ If you want to disassemble an instruction at a specific address:
 // "addr" is the address of the instruction you want to disassemble
 // The resulting string can be printed to the console,
 // or even utilized in some sort of graphical debugger
-string instr_disassembly = core.disassembleinstr(addr);
+stringstream instr;
+core.disassembleinstr(instr, addr);
+string dasm = instr.str();
 ```
 
 If you want to output a more complete debug log of the emulated CPU state to the console:
@@ -252,12 +254,12 @@ Graphical debugger (possibly via Qt5?)
 
 # License
 
-<img src="https://www.gnu.org/graphics/gplv3-127x51.png" alt="drawing" width="150"/>
+[![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](http://www.gnu.org/licenses/gpl-3.0.en.html)
 
 Bee8080 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 # Copyright
 
-(C) 2021 BueniaDev. This project is not affiliated in any way with Intel or its associates. Intel 8080 is a registered trademark of Intel Corporation.
+(C) 2022 BueniaDev. This project is not affiliated in any way with Intel or its associates. Intel 8080 is a registered trademark of Intel Corporation.
 
 For information regarding Bee8080's stance on copyright infringement, as well as proof of Bee8080's legality, see the LEGAL.md file in this repository.

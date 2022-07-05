@@ -1,6 +1,6 @@
 /*
     This file is part of the Bee8080 engine.
-    Copyright (C) 2021 BueniaDev.
+    Copyright (C) 2022 BueniaDev.
 
     Bee8080 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -105,13 +105,15 @@ namespace bee8080
 	    int runinstruction();
 
 	    // Asks for an interrupt to be serviced
-	    void setinterrupt(uint8_t opcode);
+	    void setinterrupt(uint8_t opcode, bool is_pending = true);
 
 	    // Prints debug output to the console
 	    void debugoutput(bool printdisassembly = true);
 
 	    // Disassembles an Intel 8080 instruction at address of "addr"
-	    string disassembleinstr(uint16_t addr);
+	    // and outputs it using output stream of "stream"
+	    // Return value: Size of instruction
+	    size_t disassembleinstr(ostream &stream, size_t pc);
 
 	private:
 	    // Private declaration of interface class
