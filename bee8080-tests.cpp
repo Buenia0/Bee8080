@@ -226,6 +226,24 @@ void run_test(Bee8080 &core, string filename, uint64_t cycles_expected)
     bool is_test_done = false;
     TestInterface inter(is_test_done);
     core.setinterface(&inter);
+    core.setBreakpointCallback([&](Bee8080Breakpoint &breakpoint, uint16_t value) -> void
+    {
+	switch (breakpoint.break_type)
+	{
+	    case Bee8080Breakpoint::Type::Opcode:
+	    {
+		cout << "PC [" << hex << int(breakpoint.address) << "] opcode" << endl;
+	    }
+	    break;
+	    default:
+	    {
+		cout << "Unknown breakpoint" << endl;
+	    }
+	    break;
+	}
+    });
+
+    // core.addbreakpoint(0);
 
     core.init(0x100);
 

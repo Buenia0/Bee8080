@@ -18,6 +18,8 @@ Easily customizable interface
 
 Dynamic disassembly (from any memory address) and simple debug output
 
+Preliminary support for CPU breakpoints
+
 And more to come!
 
 # Building Instructions

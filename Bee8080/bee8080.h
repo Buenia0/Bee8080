@@ -24,6 +24,8 @@
 #include <iostream>
 #include <sstream>
 #include <cstdint>
+#include <functional>
+#include <set>
 using namespace std;
 
 namespace bee8080
@@ -73,9 +75,28 @@ namespace bee8080
 	    uint8_t lo = 0;
     };
 
+    // Class for Bee8080 breakpoints
+
+    struct Bee8080Breakpoint
+    {
+	enum Type : int
+	{
+	    Opcode = 0
+	};
+
+	Bee8080Breakpoint(Type type, uint16_t addr) : break_type(type), address(addr)
+	{
+
+	}
+
+	Type break_type;
+	uint16_t address;
+    };
+
     // Class for the actual Intel 8080 emulation logic
     class Bee8080
     {
+	using breakfunc = function<void(Bee8080Breakpoint&, uint16_t)>;
 	public:
 	    Bee8080();
 	    ~Bee8080();
@@ -115,9 +136,24 @@ namespace bee8080
 	    // Return value: Size of instruction
 	    size_t disassembleinstr(ostream &stream, size_t pc);
 
+	    // Add breakpoint at address of "addr"
+	    void addbreakpoint(uint16_t addr);
+
+	    // Set callback for breakpoints
+	    void setBreakpointCallback(breakfunc cb)
+	    {
+		break_func = cb;
+	    }
+
 	private:
 	    // Private declaration of interface class
 	    Bee8080Interface *inter = NULL;
+
+	    // Function for breakpoints
+	    breakfunc break_func;
+
+	    // Array of breakpoints
+	    set<uint16_t> opcode_breakpoints;
 
 	    // Contains the main logic for the 8080 instruction set
 	    int executenextopcode(uint8_t opcode);

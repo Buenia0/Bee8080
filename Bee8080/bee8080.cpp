@@ -147,21 +147,32 @@ void Bee8080::setinterface(Bee8080Interface *cb)
 // Executes a single instruction and returns its cycle count
 int Bee8080::runinstruction()
 {
+    int cycles = 0;
+
     // Handle interrupts
     if (interrupt_pending && interrupt_enable)
     {
 	interrupt_pending = false;
 	interrupt_enable = false;
 	is_halted = false;
-	return executenextopcode(interrupt_opcode);
+	cycles = executenextopcode(interrupt_opcode);
     }
     else if (!is_halted)
     {
 	// Execute next instruction
-	return executenextopcode(getimmByte());
+	cycles = executenextopcode(getimmByte());
     }
 
-    return 0;
+    if (!opcode_breakpoints.empty() && (opcode_breakpoints.find(pc) != opcode_breakpoints.end()))
+    {
+	if (break_func)
+	{
+	    Bee8080Breakpoint breakpoint(Bee8080Breakpoint::Type::Opcode, pc);
+	    break_func(breakpoint, 0);
+	}
+    }
+
+    return cycles;
 }
 
 // Asks the emulated 8080 to service an interrupt
@@ -170,6 +181,12 @@ void Bee8080::setinterrupt(uint8_t opcode, bool is_pending)
 {
     interrupt_pending = is_pending;
     interrupt_opcode = opcode;
+}
+
+// Add breakpoint at address of "addr"
+void Bee8080::addbreakpoint(uint16_t addr)
+{
+    opcode_breakpoints.insert(addr);
 }
 
 // Reads an 8-bit value from memory at address of "addr"
